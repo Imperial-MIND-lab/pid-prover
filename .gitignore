@@ -1,0 +1,113 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Type checking
+.pytype/
+
+# Distribution / packaging
+*.whl
+
+# Research outputs (optional - uncomment if you want to gitignore)
+# research_outputs/*.md
+# research_outputs/*.dot
+# research_outputs/*.png
+
+# Keep only README in research_outputs
+research_outputs/*
+!research_outputs/README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# LaTeX auxiliary files (for main.tex)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# IDE specific
+.project
+.pydevproject
+.settings/
+
+# Rope project settings
+.ropeproject
+
+# Claude Code
+.claude/
