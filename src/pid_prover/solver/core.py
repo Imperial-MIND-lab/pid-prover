@@ -111,5 +111,3 @@ def _add_bivariate_theorems(solver: z3.Solver) -> None:
 
 def _add_multivariate_theorems(solver: z3.Solver) -> None:
     """Add theorems specific to n>=3."""
-    # Theorem 2 (noIIDLyu): ¬(S0 ∧ M0 ∧ SR ∧ EI ∧ IID)  (only for n>=3)
-    solver.add(z3.Not(z3.And(P['S0'], P['M0'], P['SR'], P['EI'], P['IID'])))
