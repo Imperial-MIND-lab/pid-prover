@@ -21,5 +21,5 @@ def sample_properties():
     return {
         "valid_bivariate": ["SR", "S0", "M0", "GP"],
         "valid_multivariate": ["SR", "S0", "GP"],
-        "invalid": ["SR", "S0", "M0", "EI", "IID"],  # Violates Theorem 2 for n>=3
+        "invalid": ["SR", "S0", "M0", "EI", "LP1", "IID"],
     }
