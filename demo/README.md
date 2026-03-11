@@ -10,7 +10,7 @@ Each demo can be run directly with pytest:
 
 ```bash
 # Run a specific demo
-pytest demo/exploration_measure_failures.py -v
+pytest demo/exploration_axiom_minimality.py -v
 
 # Run all demos
 pytest demo/ -v
