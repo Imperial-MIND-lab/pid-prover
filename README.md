@@ -111,7 +111,7 @@ For complete property definitions, measure descriptions, and known issues, see [
 
 ## Citation
 
-If you use this software in your research, please cite the accompanying [paper](https://arxiv.org/abs/XXXX.XXXXX):
+If you use this software in your research, please cite the accompanying [paper](https://arxiv.org/abs/2603.06678):
 
 ```bibtex
 @article{liardi2026mathematical,
