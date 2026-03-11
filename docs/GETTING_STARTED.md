@@ -102,14 +102,7 @@ You'll see output like:
 ```
 Validating measures...
 Bivariate (n=2): 19/19 passed ✓
-Multivariate (n≥3): 14/15 passed ✗
-
-Failed measures (multivariate):
-  - I_CT: Claims {S0, M0, SR, EI, IID} (violates Theorem 2)
-  - I_RR: Claims {S0, M0, SR, EI, IID} (violates Theorem 2)
-  - I_wedge: Claims {S0, M0, SR, EI, IID} (violates Theorem 2)
-  - I_alpha: Claims {S0, M0, SR, EI, IID} (violates Theorem 2)
-  - I_prec: Claims {S0, M0, SR, EI, IID} (violates Theorem 2)
+Multivariate (n≥3): 14/14 passed ✓
 ```
 
 **Note**: These failures are expected and represent a systematic error in the literature. See [RESEARCH_FINDINGS.md](../RESEARCH_FINDINGS.md) for details.
