@@ -36,20 +36,7 @@ Demos generate markdown reports and visualizations in `research_outputs/`:
 
 ## Available Demos
 
-### 1. Measure Failures Investigation ⭐ CRITICAL
-**File:** `exploration_measure_failures.py`
-
-Investigates why 5 measures fail multivariate validation.
-
-**Key Findings:**
-- All 5 measures (I_CT, I_RR, I_wedge, I_alpha, I_prec) share the same conflict
-- Root cause: All claim {SR, S0, M0, EI, IID} which violates Theorem 2 (noIIDLyu) for n≥3
-- **Conclusion:** Systematic error in paper Table 1 - IID should be marked as Y_2 (bivariate-only)
-- Generates correction proposals for each measure
-
-**Runtime:** 5-10 minutes
-
-### 2. Large Conflicts Discovery
+### 1. Large Conflicts Discovery
 **File:** `exploration_large_conflicts.py`
 
 Discovers novel no-go theorems by searching for size 5-6 conflicts.
@@ -58,12 +45,11 @@ Discovers novel no-go theorems by searching for size 5-6 conflicts.
 - Found X bivariate conflicts (size ≤5)
 - Found Y multivariate conflicts (size ≤5)
 - Multivariate case has Y-X = Z additional conflicts
-- Includes Theorem 2: {SR, S0, M0, EI, IID} impossible for n≥3
 - Novel size-6 conflicts discovered (not in paper)
 
 **Runtime:** 10-30 minutes (size-6 marked as slow)
 
-### 3. Property Dependencies
+### 2. Property Dependencies
 **File:** `exploration_property_dependencies.py`
 
 Builds complete implication graphs for all 20 properties.
@@ -77,7 +63,7 @@ Builds complete implication graphs for all 20 properties.
 
 **Runtime:** 10-20 minutes
 
-### 4. Axiom Minimality
+### 3. Axiom Minimality
 **File:** `exploration_axiom_minimality.py`
 
 Tests whether axioms are independent or derivable.
@@ -90,7 +76,7 @@ Tests whether axioms are independent or derivable.
 
 **Runtime:** 15-30 minutes (marked as slow)
 
-### 5. Multi-Premise Implications
+### 4. Multi-Premise Implications
 **File:** `exploration_multi_premise_implications.py`
 
 Discovers 3-4 premise implications (A ∧ B ∧ C ⇒ D).
@@ -103,7 +89,7 @@ Discovers 3-4 premise implications (A ∧ B ∧ C ⇒ D).
 
 **Runtime:** 20-60 minutes (4-premise marked as slow)
 
-### 6. Measure Design Space
+### 5. Measure Design Space
 **File:** `exploration_measure_design_space.py`
 
 Explores the space of possible PID measures.
@@ -117,7 +103,7 @@ Explores the space of possible PID measures.
 
 **Runtime:** 15-30 minutes
 
-### 7. Bivariate vs Multivariate
+### 6. Bivariate vs Multivariate
 **File:** `exploration_bivariate_multivariate.py`
 
 Systematic comparison of n=2 vs n≥3 cases.
@@ -130,7 +116,7 @@ Systematic comparison of n=2 vs n≥3 cases.
 
 **Runtime:** 15-30 minutes
 
-### 8. Theorem 8 Investigation
+### 7. Theorem 8 Investigation
 **File:** `exploration_theorem8_mechanistic.py`
 
 Investigates missing Theorem 8 (mechanistic redundancy).
@@ -202,10 +188,13 @@ research_outputs/
 If these demos lead to research findings, please cite:
 
 ```bibtex
-@software{mediano2025pid_prover,
-  author = {Mediano, Pedro A. M.},
-  title = {PID Theorem Prover},
-  year = {2025},
-  url = {https://github.com/pmediano/pid-prover}
+@article{liardi2026mathematical,
+      title={The mathematical landscape of partial information decomposition: A comprehensive review of properties and measures}, 
+      author={Alberto Liardi and Keenan J. A. Down and George Blackburne and Matteo Neri and Pedro A. M. Mediano},
+      year={2026},
+      eprint={2603.06678},
+      archivePrefix={arXiv},
+      primaryClass={cs.IT},
+      url={https://arxiv.org/abs/2603.06678}, 
 }
 ```
