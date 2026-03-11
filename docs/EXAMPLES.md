@@ -88,23 +88,6 @@ for i, conflict in enumerate(conflicts, 1):
     print(f"{i}. {{{', '.join(conflict)}}}")
 ```
 
-### Find Theorem 2 (noIIDLyu)
-
-```python
-from pid_prover import find_minimal_conflicts
-
-# Theorem 2 is a size-5 conflict in multivariate
-conflicts = find_minimal_conflicts("multivariate", max_size=5, filter_reducible=True)
-
-# Look for the specific conflict
-theorem_2 = {'SR', 'S0', 'M0', 'EI', 'IID'}
-
-for conflict in conflicts:
-    if set(conflict) == theorem_2:
-        print(f"Found Theorem 2: {{{', '.join(conflict)}}}")
-        break
-```
-
 ### Find All Conflicts for a Measure
 
 ```python
