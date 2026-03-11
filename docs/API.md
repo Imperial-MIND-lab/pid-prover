@@ -157,7 +157,3 @@ Quick reference:
 - `I_PM`, `I_SX`, `I_MES`, `I_do`, `I_wedge`, `I_alpha`, `I_prec`
 
 (*bivariate-only)
-
-## Known Issues
-
-Five measures fail multivariate validation. For detailed analysis and correction proposals, see [RESEARCH_FINDINGS.md](../RESEARCH_FINDINGS.md#multivariate-validation-failures).
