@@ -61,10 +61,6 @@ def validate_measures() -> bool:
     bool
         True if all measures pass validation, False otherwise
 
-    Notes
-    -----
-    Known issue: 5 measures fail multivariate validation due to
-    Theorem 2 conflict. See measures.data.MULTIVARIATE_CONFLICTS.
     """
     print("\n" + "="*80)
     print("MEASURE VALIDATION")
