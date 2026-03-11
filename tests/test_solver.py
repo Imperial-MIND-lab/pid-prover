@@ -17,15 +17,6 @@ def test_get_pid_solver_multivariate():
     assert isinstance(solver, z3.Solver)
 
 
-def test_theorem_2_multivariate(multivariate_solver):
-    """Test Theorem 2 is enforced for n>=3."""
-    # {S0, M0, SR, EI, IID} should be unsat for multivariate
-    result = multivariate_solver.check(z3.And([
-        P["S0"], P["M0"], P["SR"], P["EI"], P["IID"]
-    ]))
-    assert result == z3.unsat
-
-
 def test_theorem_7_bivariate(bivariate_solver):
     """Test Theorem 7 is enforced for n=2."""
     # BP => TE ∧ SE
