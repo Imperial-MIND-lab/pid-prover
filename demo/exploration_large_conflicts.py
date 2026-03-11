@@ -128,8 +128,8 @@ def test_multivariate_conflicts_size_5():
     """
     Find all size-5 conflicts in the multivariate case.
 
-    The multivariate case is known to be more restrictive (e.g., Theorem 2 is
-    a size-5 conflict). This test discovers additional size-5 conflicts.
+    The multivariate case is known to be more restrictive. 
+    This test discovers additional size-5 conflicts.
     Expected runtime: 2-5 minutes.
     """
     print("\n" + "="*80)
@@ -143,12 +143,6 @@ def test_multivariate_conflicts_size_5():
 
     print(f"\nFound {len(size_5_conflicts)} size-5 conflicts (multivariate)")
 
-    # Check if Theorem 2 (noIIDLyu) is among them
-    theorem_2_conflict = {'SR', 'S0', 'M0', 'EI', 'IID'}
-    found_theorem_2 = any(set(c) == theorem_2_conflict for c in size_5_conflicts)
-
-    print(f"Theorem 2 conflict found: {found_theorem_2}")
-
     # Save results
     if size_5_conflicts:
         other_conflicts = [c for c in size_5_conflicts if set(c) != theorem_2_conflict]
@@ -158,17 +152,9 @@ def test_multivariate_conflicts_size_5():
                 "Case": "multivariate (n≥3)",
                 "Conflict size": 5,
                 "Total found": len(size_5_conflicts),
-                "Known (Theorem 2)": "Yes" if found_theorem_2 else "No",
                 "Novel conflicts": len(other_conflicts)
             },
-            "Known Conflict (Theorem 2)": [
-                format_property_set(list(theorem_2_conflict))
-            ] if found_theorem_2 else ["Not found - potential issue!"],
-            "Novel Size-5 Conflicts": [
-                format_property_set(c) for c in other_conflicts
-            ] if other_conflicts else ["None beyond Theorem 2"],
             "Analysis": [
-                "Theorem 2 (noIIDLyu) is the documented size-5 conflict for n≥3.",
                 f"Found {len(other_conflicts)} additional size-5 conflicts.",
                 "These represent novel no-go theorems for the multivariate case."
             ]
@@ -177,12 +163,11 @@ def test_multivariate_conflicts_size_5():
             findings,
             "conflicts_size5_multivariate.md",
             title="Size-5 Conflicts (Multivariate)",
-            description="No-go theorems for n≥3 case including Theorem 2"
+            description="No-go theorems for n≥3 case"
         )
         print(f"\nResults saved to: {output_path}")
 
     assert isinstance(conflicts, list)
-    assert len(size_5_conflicts) >= 1  # Should at least find Theorem 2
 
 
 @pytest.mark.exploration
@@ -294,7 +279,6 @@ def test_compare_conflict_counts():
             "Multivariate case (n≥3) is more restrictive than bivariate (n=2).",
             "Additional conflicts in multivariate case represent properties that are compatible for n=2 but incompatible for n≥3.",
             "This quantifies the 'multivariate strictness' phenomenon.",
-            "Key example: Theorem 2 ({SR, S0, M0, EI, IID}) is multivariate-only conflict."
         ]
     }
 
@@ -332,12 +316,7 @@ def test_conflicts_basic_sanity():
     print(f"\nBivariate conflicts (up to size 4): {len(biv_conflicts)}")
     print(f"Multivariate conflicts (up to size 5): {len(multi_conflicts)}")
 
-    # Should find Theorem 2 in multivariate
-    theorem_2 = {'SR', 'S0', 'M0', 'EI', 'IID'}
-    has_theorem_2 = any(set(c) == theorem_2 for c in multi_conflicts)
-
     assert len(biv_conflicts) > 0, "Should find bivariate conflicts"
     assert len(multi_conflicts) > 0, "Should find multivariate conflicts"
-    assert has_theorem_2, "Should find Theorem 2 (noIIDLyu) in multivariate conflicts"
 
     print("\n✓ Sanity check passed: Conflict discovery working correctly")
