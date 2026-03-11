@@ -69,7 +69,7 @@ packages = ["pid_prover", "pid_prover.solver", "pid_prover.measures", "pid_prove
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = "test_*.py"
+python_files = ["test_*.py", "exploration*.py"]
 python_classes = "Test*"
 python_functions = "test_*"
 addopts = "-v --tb=short --strict-markers"
