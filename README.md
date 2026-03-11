@@ -109,21 +109,19 @@ The system analyzes **20 properties** that PID measures may satisfy and validate
 
 For complete property definitions, measure descriptions, and known issues, see [Properties Reference](docs/PROPERTIES.md).
 
-## Known Issues
-
-Five measures fail multivariate validation due to a systematic error in the literature. See [Research Findings](RESEARCH_FINDINGS.md) for detailed analysis and correction proposals.
-
 ## Citation
 
 If you use this software in your research, please cite the accompanying [paper](https://arxiv.org/abs/XXXX.XXXXX):
 
 ```bibtex
-@article{liardi2026pid,
-  author = {Liardi, Alberto et al},
-  title = {Title TBD},
-  journal = {ArXiv},
-  year = {2026},
-  note = {Preprint available at arXiv:XXXX.XXXXX}
+@misc{liardi2026mathematical,
+      title={The mathematical landscape of partial information decomposition: A comprehensive review of properties and measures}, 
+      author={Alberto Liardi and Keenan J. A. Down and George Blackburne and Matteo Neri and Pedro A. M. Mediano},
+      year={2026},
+      eprint={2603.06678},
+      archivePrefix={arXiv},
+      primaryClass={cs.IT},
+      url={https://arxiv.org/abs/2603.06678}, 
 }
 ```
 
