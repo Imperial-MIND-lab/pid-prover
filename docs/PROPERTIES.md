@@ -102,25 +102,7 @@ The PID framework distinguishes between two cases:
 - **Measure count**: 15 measures (excludes 4 bivariate-only measures)
 - **Property landscape**: More constrained; some property sets become impossible
 
-**Important**: Some theorems only apply to multivariate cases. For example, Theorem 2 (noIIDLyu) proves that {S0, M0, SR, EI, IID} is impossible for n≥3 but may be consistent for n=2.
-
-## Known Issues
-
-### Multivariate Validation Failures
-
-Five measures fail multivariate validation due to an inconsistency with Theorem 2 (noIIDLyu):
-
-- **I_CT** (Consistent Transfer)
-- **I_RR** (Reconnoiter-Redundancy)
-- **I_wedge** (Wedge measure)
-- **I_alpha** (Alpha measure)
-- **I_prec** (Precision measure)
-
-**Issue**: These measures claim to satisfy {S0, M0, SR, EI, IID}, which is proven impossible for n≥3 by Theorem 2.
-
-**Root cause**: Systematic error in the literature's Table 1 property attributions.
-
-**Details**: See [RESEARCH_FINDINGS.md](../RESEARCH_FINDINGS.md#multivariate-validation-failures) for comprehensive analysis, correction proposals, and mathematical proofs.
+**Important**: Some theorems only apply to multivariate cases.
 
 ## See Also
 
