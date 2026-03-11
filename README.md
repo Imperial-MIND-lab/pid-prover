@@ -114,7 +114,7 @@ For complete property definitions, measure descriptions, and known issues, see [
 If you use this software in your research, please cite the accompanying [paper](https://arxiv.org/abs/XXXX.XXXXX):
 
 ```bibtex
-@misc{liardi2026mathematical,
+@article{liardi2026mathematical,
       title={The mathematical landscape of partial information decomposition: A comprehensive review of properties and measures}, 
       author={Alberto Liardi and Keenan J. A. Down and George Blackburne and Matteo Neri and Pedro A. M. Mediano},
       year={2026},
