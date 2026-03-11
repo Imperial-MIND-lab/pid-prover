@@ -40,7 +40,3 @@ bivariate_only_measures: List[str] = ["I_BROJA", "I_delta", "I_red", "I_DEP"]
 
 # Create DataFrame: rows=properties, columns=measures
 measures_df: pd.DataFrame = pd.DataFrame(measures_data, index=measure_names).T
-
-# Known issues: These measures fail multivariate validation due to Theorem 2
-# They claim {S0, M0, SR, EI, IID} which is impossible for n>=3
-MULTIVARIATE_CONFLICTS: List[str] = ["I_CT", "I_RR", "I_wedge", "I_alpha", "I_prec"]
