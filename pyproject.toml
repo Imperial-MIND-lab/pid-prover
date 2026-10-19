@@ -65,7 +65,10 @@ Repository = "https://github.com/pmediano/pid-prover"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["pid_prover", "pid_prover.solver", "pid_prover.measures", "pid_prover.analysis", "pid_prover.filtering"]
+packages = ["pid_prover"]
+
+[tool.setuptools.package-data]
+pid_prover = ["data/*.csv"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

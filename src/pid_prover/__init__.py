@@ -2,46 +2,48 @@
 PID Theorem Prover
 ==================
 
-A tool for analyzing Partial Information Decomposition (PID) measures
-using automated theorem proving with Z3.
+Automated reasoning on the properties of Partial Information Decomposition (PID)
+redundancy measures with the Z3 theorem prover, following
+"The mathematical landscape of partial information decomposition" (Liardi et al., 2026).
 
-Main Components
----------------
-- solver: Z3 solver setup with PID axioms
-- measures: Measure data and validation
-- analysis: Theorem discovery and property inference
-- filtering: Conflict reducibility checking
-- cli: Command-line interface
-
-Quick Start
------------
-    from pid_prover import validate_measures, find_minimal_conflicts
-
-    # Validate all measures
-    validate_measures()
-
-    # Find conflicts for bivariate case
-    conflicts = find_minimal_conflicts("bivariate", max_size=3)
+Modules
+-------
+- properties: property symbols (Table 2) and their Z3 variables
+- theorems:   implications and incompatibilities (Tables 3-4) and the Z3 solver
+- measures:   properties satisfied by each measure (Table 5) and their validation
+- analysis:   consistency checks, conflicts, implications, inference, maximal sets
+- render:     Markdown rendering of Table 5 and the theorems for the docs
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
-# Public API
-from .measures import validate_measures, measures_df
 from .analysis import (
+    explain_assignment,
+    find_maximal_compatible_sets,
     find_minimal_conflicts,
     find_minimal_implications,
+    implies,
     infer_property_consequences,
-    find_maximal_compatible_sets,
+    is_consistent,
 )
-from .solver import get_pid_solver
+from .measures import measure_properties, measures_df, validate_measures
+from .properties import P, prop_names
+from .theorems import THEOREMS, get_pid_solver, redundant_theorems
 
 __all__ = [
-    "validate_measures",
-    "measures_df",
+    "P",
+    "THEOREMS",
+    "explain_assignment",
+    "find_maximal_compatible_sets",
     "find_minimal_conflicts",
     "find_minimal_implications",
-    "infer_property_consequences",
-    "find_maximal_compatible_sets",
     "get_pid_solver",
+    "implies",
+    "infer_property_consequences",
+    "is_consistent",
+    "measure_properties",
+    "measures_df",
+    "prop_names",
+    "redundant_theorems",
+    "validate_measures",
 ]
