@@ -1,134 +1,133 @@
-# PID Theorem Prover
+# PID Prover
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
-[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](tests/)
+[![arXiv](https://img.shields.io/badge/arXiv-2603.06678-b31b1b.svg)](https://arxiv.org/abs/2603.06678)
+[![DOI](https://img.shields.io/badge/DOI-10.48550%2FarXiv.2603.06678-blue.svg)](https://doi.org/10.48550/arXiv.2603.06678)
 
-A tool for analyzing Partial Information Decomposition (PID) measures using automated theorem proving with Z3.
+Automated reasoning on the properties of Partial Information Decomposition (PID) redundancy
+measures, accompanying the paper
+[*The mathematical landscape of partial information decomposition*](https://arxiv.org/abs/2603.06678).
 
-## Overview
+Each PID property (e.g. self-redundancy, local positivity, identity) is a Boolean variable, and
+each known theorem relating them is a logical constraint for the
+[Z3 theorem prover](https://github.com/Z3Prover/z3). With these constraints, the package can:
 
-This project uses the Z3 Theorem Prover to explore the logical landscape of Partial Information Decomposition. It encodes properties as boolean variables and uses known theorems from the literature as axioms to:
-
-1. Validate consistency of existing PID measures
-2. Discover new minimal implications (Theorems)
-3. Identify minimal inconsistent sets of properties (No-go Theorems)
-4. Infer mandatory and forbidden properties for proposed measures
-
-### Validation
-Validates 19 PID measures against 20 properties for both bivariate (n=2) and multivariate (n≥3) cases.
-
-### Conflict Discovery
-Finds minimal inconsistent property sets (no-go theorems) using systematic search with reducibility filtering.
-
-### Implication Discovery
-Discovers minimal logical implications between properties.
-
-### Property Inference
-Given a set of intended properties, determines what additional properties are mandatory or forbidden.
-
-### Research Explorations
-The `demo/` folder contains research exploration tests that discover novel mathematical insights:
-- Novel no-go theorems (size 5-6 conflicts)
-- Complete property dependency graphs
-- Measure failure root cause analysis
-- Design space exploration
-- Multivariate strictness quantification
-
-See [demo/README.md](demo/README.md) for details.
+- **validate** Table 5: check that the properties each measure satisfies, and those it violates,
+  agree with all known theorems;
+- **find conflicts**: minimal sets of properties that no measure can satisfy together (no-go theorems);
+- **find implications**: minimal sets of properties that force another one;
+- **infer** which properties a proposed measure must or cannot satisfy;
+- **enumerate** all maximal sets of mutually compatible properties.
 
 ## Installation
 
 ```bash
-# From source
-git clone https://github.com/pmediano/pid-prover.git
+git clone https://github.com/Imperial-MIND-lab/pid-prover.git
 cd pid-prover
-pip install -e .
+pip install -e .            # or: pip install -e ".[dev]" for the tests
 ```
 
-For detailed installation instructions, see [Getting Started Guide](docs/GETTING_STARTED.md).
-
-## Quick Start
+## Quick start
 
 ```python
-from pid_prover import validate_measures
+from pid_prover import infer_property_consequences, is_consistent, validate_measures
 
-# Validate all PID measures
-validate_measures()
+validate_measures()                                   # check every column of Table 5
+is_consistent(["SR", "S0", "M0", "TC"])               # False (Theo. 2)
+infer_property_consequences(["SR", "S0", "LP"], "multivariate")
+# {'Consistent': True, 'Mandatory': ['M0', 'GP', 'SE', 'LB', 'TE', 'M1'], 'Forbidden': ['TC', 'S1']}
 ```
 
-```python
-from pid_prover import infer_property_consequences
+The same analyses are available from the command line:
 
-# Design a new measure
-results = infer_property_consequences(["SR", "S0", "GP"], "bivariate")
-print("Must satisfy:", results["Mandatory"])
-print("Cannot satisfy:", results["Forbidden"])
+```bash
+pid-prover validate                                   # check Table 5 against the theorems
+pid-prover conflicts --case multivariate --max-size 6
+pid-prover implications --premises 2
+pid-prover infer SR S0 LP --case multivariate
+pid-prover maximal --require SR S0 M0
+pid-prover theorems                                   # list the encoded theorems
 ```
 
-For more examples, see the [Examples Guide](docs/EXAMPLES.md).
+Every analysis takes a case: `bivariate` (properties required for *n* = 2 sources) or
+`multivariate` (properties required for any number of sources). See the [guide](docs/GUIDE.md)
+for details.
+
+## Properties of PID measures
+
+<!-- BEGIN TABLE5 (generated by `pid-prover sync-docs` from src/pid_prover/data/table5.csv; do not edit by hand) -->
+| | <i>I</i><sub>∩</sub><sup>min</sup> | <i>I</i><sub>∩</sub><sup>MMI</sup> | <i>I</i><sub>∩</sub><sup>RDR</sup> | <i>I</i><sub>∩</sub><sup>BROJA</sup> | <i>I</i><sub>∩</sub><sup>δ</sup> | <i>I</i><sub>∩</sub><sup>red</sup> | <i>I</i><sub>∩</sub><sup>IG</sup> | <i>I</i><sub>∩</sub><sup>RR</sup> | <i>I</i><sub>∩</sub><sup>DEP</sup> | <i>I</i><sub>∩</sub><sup>CT</sup> | <i>I</i><sub>∩</sub><sup>RAV</sup> | <i>I</i><sub>∩</sub><sup>∧</sup> | <i>I</i><sub>∩</sub><sup>α</sup> | <i>I</i><sub>∩</sub><sup>≺</sup> | <i>I</i><sub>∩</sub><sup>MES</sup> | <i>I</i><sub>∩</sub><sup>do</sup> | <i>I</i><sub>∩</sub><sup>PM</sup> | <i>I</i><sub>∩</sub><sup>SX</sup> | <i>I</i><sub>∩</sub><sup>CCS</sup> |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| **(SR)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> |
+| **(S<sub>0</sub>)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> |
+| **(M<sub>0</sub>)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>†</sup> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(GP)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(LP<sub>0</sub>)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(LP<sub>1</sub>)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <font color="#2a4de0">n.a.</font> | <font color="#2a4de0">n.a.</font> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(IID)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> |
+| **(ID)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **&#40;TM&#41;** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>*</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(TC)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(SE)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> |
+| **(LB)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>†</sup> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(TE)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>†</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(M<sub>1</sub>)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>†</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(S<sub>1</sub>)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(∗)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"><sup>‡</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(BP)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(AD)** | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(CO)**<sup>∥</sup> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"><sup>§</sup> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(DI)**<sup>∥</sup> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/no.svg" alt="✗" height="16"> |
+| **(EI)** | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> | <img src="docs/img/yes.svg" alt="✓" height="16"> |
+
+**Table 5: Comparison of theoretical properties across redundancy measures.** The ordering of the measures is inspired by the hierarchical clustering of Fig. 1b of the paper. \*: this property is not formally proven but is supported by empirical simulations. †: these properties only hold for *n* = 2 sources. §: these properties only hold in the case of full-support distributions. ∥: these properties are intended globally; for many measures, the almost-everywhere version holds. ‡: the pointwise version of these properties holds for both informative and misinformative lattices separately.
+<!-- END TABLE5 -->
+
+To update the table, edit [`src/pid_prover/data/table5.csv`](src/pid_prover/data/table5.csv)
+(it uses the same symbols as the paper) and run `pid-prover sync-docs`. The tests check that the
+table above matches the data and that the data is consistent with all the theorems.
 
 ## Documentation
 
-Choose your path based on your needs:
+- [Guide](docs/GUIDE.md): how to use the Python API and the command line.
+- [Reference](docs/REFERENCE.md): properties, measures, encoded theorems and conventions.
+- [Notebook](notebooks/getting_started.ipynb): an interactive tour of the analyses.
+- [Contributing](CONTRIBUTING.md): how to update the table, add theorems, and run the tests.
 
-**New to PID Prover?**
-- [Getting Started Guide](docs/GETTING_STARTED.md) - Installation and first steps
-
-**Using the API?**
-- [Examples Guide](docs/EXAMPLES.md) - Comprehensive usage examples
-- [API Reference](docs/API.md) - Function signatures and parameters
-
-**Looking for reference material?**
-- [Properties Reference](docs/PROPERTIES.md) - All properties and measures
-
-**Contributing?**
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-
-## Repository Structure
+## Repository structure
 
 ```
-pid-prover/
-├── src/
-│   └── pid_prover/      # Main package
-│       ├── solver/      # Z3 solver setup with PID axioms
-│       ├── measures/    # Measure data and validation
-│       ├── analysis/    # Theorem discovery and inference
-│       ├── filtering/   # Conflict reducibility checking
-│       └── cli.py       # Command-line interface
-├── tests/               # Unit tests and validation tests
-├── demo/                # Research exploration demos
-├── docs/                # Documentation
-└── notebooks/           # Jupyter notebooks
+src/pid_prover/
+├── data/table5.csv   # Table 5: properties satisfied by each measure
+├── properties.py     # property symbols and Z3 variables (Table 2)
+├── theorems.py       # implications and incompatibilities (Tables 3-4), Z3 solver
+├── measures.py       # loading and validation of Table 5
+├── analysis.py       # conflicts, implications, inference, maximal compatible sets
+├── render.py         # generates the tables in README.md and docs/REFERENCE.md
+└── cli.py            # `pid-prover` command
+tests/                # unit tests and regression tests of the paper's results
+docs/                 # guide and reference
+notebooks/            # getting-started notebook
 ```
-
-## Properties and Measures
-
-The system analyzes **20 properties** that PID measures may satisfy and validates **19 measures** from the literature.
-
-For complete property definitions, measure descriptions, and known issues, see [Properties Reference](docs/PROPERTIES.md).
 
 ## Citation
 
-If you use this software in your research, please cite the accompanying [paper](https://arxiv.org/abs/2603.06678):
+If you use this software in your research, please cite the
+[accompanying paper](https://arxiv.org/abs/2603.06678):
 
 ```bibtex
 @article{liardi2026mathematical,
-      title={The mathematical landscape of partial information decomposition: A comprehensive review of properties and measures}, 
+      title={The mathematical landscape of partial information decomposition: A comprehensive review of properties and measures},
       author={Alberto Liardi and Keenan J. A. Down and George Blackburne and Matteo Neri and Pedro A. M. Mediano},
       year={2026},
       eprint={2603.06678},
       archivePrefix={arXiv},
       primaryClass={cs.IT},
-      url={https://arxiv.org/abs/2603.06678}, 
+      url={https://arxiv.org/abs/2603.06678},
 }
 ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-Special thanks to the Z3 theorem prover team and the PID research community.
+MIT, see [LICENSE](LICENSE).

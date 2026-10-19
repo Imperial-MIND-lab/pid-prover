@@ -1,222 +1,47 @@
-# Contributing to PID Theorem Prover
+# Contributing
 
-Thank you for your interest in contributing! This project welcomes contributions from the research community.
+Bug reports, corrections and new results are welcome: open an issue or a pull request on
+[GitHub](https://github.com/Imperial-MIND-lab/pid-prover).
 
-## Development Setup
-
-For basic installation instructions, see [Getting Started Guide](docs/GETTING_STARTED.md).
-
-### 1. Fork and Clone
+## Setup
 
 ```bash
-git clone https://github.com/pmediano/pid-prover.git
+git clone https://github.com/Imperial-MIND-lab/pid-prover.git
 cd pid-prover
-```
-
-### 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install in Development Mode
-
-```bash
 pip install -e ".[dev]"
+pytest
 ```
 
-This installs the package with development dependencies:
-- pytest: Testing framework
-- pytest-cov: Coverage reporting
-- black: Code formatting
-- mypy: Type checking
+## Updating the data
 
-## Development Workflow
+All content comes from three places; the tests and the generated tables in the docs follow
+from them. After any change, run `pid-prover sync-docs` and `pytest`.
 
-### Running Tests
+- **Table 5** ([`src/pid_prover/data/table5.csv`](src/pid_prover/data/table5.csv)): one row
+  per property, one column per measure, written with the symbols of the paper
+  (see [Table 5 entries](docs/REFERENCE.md#table-5-entries)).
+- **Theorems** (`THEOREMS` in [`src/pid_prover/theorems.py`](src/pid_prover/theorems.py)):
+  each result is one line, e.g.
 
-```bash
-# Run all tests
-pytest tests/
+  ```python
+  T("Theo. 2", "incompatible", ("SR", "S0", "M0", "TC")),
+  T("Theo. 5", "implies", ("BP",), ("SE", "TE"), case="bivariate"),
+  ```
 
-# Run with coverage
-pytest --cov=pid_prover tests/
+  Set `derived=True` if the result follows from the others; the tests check this flag in both
+  directions, so they also catch results that make an existing one redundant.
+- **Properties and measures** (`PROPERTIES` in
+  [`properties.py`](src/pid_prover/properties.py), `MEASURES` in
+  [`measures.py`](src/pid_prover/measures.py)): a new property also needs a row in the CSV, and
+  a new measure a column.
 
-# Run specific test file
-pytest tests/test_measures.py -v
+If `validate_measures` fails after a change, it prints a minimal set of contradictory entries,
+which points to the table entry or theorem to double-check.
 
-# Run only fast tests (exclude slow exploration tests)
-pytest tests/ -m "not slow"
-```
+## Code
 
-### Code Formatting
-
-We use Black for consistent formatting:
-
-```bash
-# Format all code
-black pid_prover/ tests/
-
-# Check formatting without changes
-black --check pid_prover/ tests/
-```
-
-### Type Checking
-
-```bash
-# Run mypy
-mypy pid_prover/
-```
-
-## Contributing Guidelines
-
-### Code Style
-
-- Follow PEP 8 guidelines
-- Use Black for formatting (line length: 100)
-- Add type hints to function signatures
-- Write clear docstrings (NumPy style)
-
-### Testing
-
-- Write tests for new features
-- Maintain or improve code coverage
-- Mark slow tests with `@pytest.mark.slow`
-- Mark exploration tests with `@pytest.mark.exploration`
-
-### Documentation
-
-- Update README.md for new features
-- Add docstrings to all public functions
-- Create or update notebooks for significant features
-- Document any new properties or theorems
-
-### Commit Messages
-
-Use clear, descriptive commit messages:
-
-```
-Add support for custom property definitions
-
-- Extend axioms.py to support user-defined properties
-- Add validation for custom property syntax
-- Update tests and documentation
-```
-
-### Pull Request Process
-
-1. **Create a branch** for your feature:
-   ```bash
-   git checkout -b feature/my-new-feature
-   ```
-
-2. **Make your changes** and commit:
-   ```bash
-   git add .
-   git commit -m "Add my new feature"
-   ```
-
-3. **Push to your fork**:
-   ```bash
-   git push origin feature/my-new-feature
-   ```
-
-4. **Open a Pull Request** on GitHub:
-   - Describe the changes
-   - Reference related issues
-   - Include test results
-
-5. **Address review feedback** if any
-
-6. **Merge** once approved
-
-## Types of Contributions
-
-### 1. Bug Reports
-
-Found a bug? Open an issue with:
-- Description of the problem
-- Steps to reproduce
-- Expected vs actual behavior
-- System information (Python version, OS)
-
-### 2. Feature Requests
-
-Have an idea? Open an issue describing:
-- The feature or enhancement
-- Use case and motivation
-- Proposed implementation (if any)
-
-### 3. New Measures
-
-Adding a new PID measure:
-
-1. Add measure data to `src/pid_prover/measures/data.py`:
-   ```python
-   # In measures_data dictionary
-   "NEW_PROPERTY": ["Y", "N", "Y", ...]  # 19 values
-   ```
-
-2. Add to measure_names list
-
-3. Document the source in `src/pid_prover/measures/SOURCES.md`
-
-4. Run validation: `pytest tests/test_measures.py`
-
-### 4. New Properties
-
-For a list of all current properties, see [Properties Reference](docs/PROPERTIES.md).
-
-Adding a new property:
-
-1. Add to `src/pid_prover/solver/axioms.py`:
-   ```python
-   prop_names.append("NEW_PROP")
-   P["NEW_PROP"] = z3.Bool("NEW_PROP")
-   ```
-
-2. Add axioms/theorems involving the property to `src/pid_prover/solver/core.py`
-
-3. Update all existing measures in `src/pid_prover/measures/data.py`
-
-4. Update [Properties Reference](docs/PROPERTIES.md) with the new property description
-
-5. Add tests
-
-### 5. New Theorems
-
-Adding a new theorem:
-
-1. Add to appropriate function in `src/pid_prover/solver/core.py`:
-   - `_add_main_theorems()` for universal theorems
-   - `_add_bivariate_theorems()` for n=2 only
-   - `_add_multivariate_theorems()` for n≥3 only
-
-2. Document the theorem with comments:
-   ```python
-   # Theorem X (label): Description
-   solver.add(z3.Not(z3.And(P['PROP1'], P['PROP2'])))
-   ```
-
-3. Add test in `tests/test_solver.py`
-
-### 6. Documentation
-
-- Fix typos or unclear explanations
-- Add examples to docstrings
-- Improve notebook clarity
-- Add new notebooks for specific use cases
-
-## Getting Help
-
-- **Questions:** Open a GitHub issue
-- **Discussion:** Start a GitHub Discussion
-- **Bugs:** Open an issue with "bug" label
-- **Features:** Open an issue with "enhancement" label
-
-## License
+- Keep functions small and documented with NumPy-style docstrings, with a line length of 100.
+- Add a test for every new feature; the paper's results are covered by regression tests in
+  `tests/test_analysis.py`.
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
-
-Thank you for contributing to PID research!
