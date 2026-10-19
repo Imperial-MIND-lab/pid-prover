@@ -64,15 +64,6 @@ dmypy.json
 # Distribution / packaging
 *.whl
 
-# Research outputs (optional - uncomment if you want to gitignore)
-# research_outputs/*.md
-# research_outputs/*.dot
-# research_outputs/*.png
-
-# Keep only README in research_outputs
-research_outputs/*
-!research_outputs/README.md
-
 # OS files
 .DS_Store
 Thumbs.db
@@ -94,6 +85,7 @@ Thumbs.db
 *.toc
 *.lof
 *.lot
+*.pdf
 
 # Temporary files
 tmp/
